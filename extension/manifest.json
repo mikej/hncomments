@@ -1,0 +1,29 @@
+{
+
+  "manifest_version": 2,
+
+  "name": "Hacker News Comments",
+  "description": "Find Hacker News discussion of the current page",
+  "version": "0.0.1",
+
+  "background": {
+    "scripts": ["jquery.min.js", "underscore-min.js", "hncomments.js"],
+    "persistent": true
+  },
+
+  "permissions": [
+    "tabs"
+  ],
+
+  "commands": {
+    "find-hn-comments": {
+      "suggested_key": {
+        "default": "Alt+Shift+H",
+        "mac": "Alt+Shift+H",
+        "linux": "Alt+Shift+H"
+      },
+      "description": "Goto HN discussion of the current page"
+    }
+  }
+
+}
