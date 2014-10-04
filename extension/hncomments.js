@@ -23,12 +23,16 @@ function processResults(data, url, title, callback) {
     }
 }
 
-function navigateToComments(url, title, match) {
+function navigateToCommentsOrAskToSubmit(url, title, match) {
     if (match) {
         var commentURL = 'https://news.ycombinator.com/item?id=' + match.objectID;
         chrome.tabs.update({ url: commentURL });
     } else {
-        window.alert('No discussion of ' + url + ' found');
+        submit = confirm('No discussion of ' + url + ' found on Hacker News. Submit it?');
+        if (submit) {
+            chrome.tabs.update({ url: 'http://news.ycombinator.com/submitlink?u=' + 
+                encodeURIComponent(url) + '&t=' + encodeURIComponent(title)});
+        }
     }
 }
 
@@ -38,7 +42,7 @@ chrome.commands.onCommand.addListener(function(command) {
             if (tab.url.substring(0,9) == 'chrome://') {
                 return;
             }
-            searchHN(tab.url, tab.title, navigateToComments);
+            searchHN(tab.url, tab.title, navigateToCommentsOrAskToSubmit);
         });
     };
 });
