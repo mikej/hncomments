@@ -1,6 +1,6 @@
-function searchHN(url) {
-    $.getJSON("https://hn.algolia.com/api/v1/search?tags=story&query=" + encodeURI(url), function(data) {
-        processResults(data, url)
+function searchHN(url, title, callback) {
+    $.getJSON("https://hn.algolia.com/api/v1/search?tags=story&restrictSearchableAttributes=url&query=" + encodeURI(url), function(data) {
+        processResults(data, url, title, callback)
     }); 
 }
 
