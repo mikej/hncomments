@@ -4,8 +4,26 @@ function searchHN(url, title, callback) {
     }); 
 }
 
-function processResults(data, url) {
-    var match = _.find(data.hits, function(hit) { return hit.url == url; });
+function bestMatch(data) {
+    if (data.hits && data.hits.length > 0) {
+        console.log('found ' + data.hits.length + ' hit(s)');
+        // just return the first hit as the best match for now, this could be tuned in the future
+        return data.hits[0];
+    } else {
+        return null;
+    }
+}
+
+function processResults(data, url, title, callback) {
+    var match = bestMatch(data);
+    if (callback) {
+        callback(url, title, match);
+    } else {
+        console.log('best match', match);
+    }
+}
+
+function navigateToComments(url, title, match) {
     if (match) {
         var commentURL = 'https://news.ycombinator.com/item?id=' + match.objectID;
         chrome.tabs.update({ url: commentURL });
@@ -20,7 +38,7 @@ chrome.commands.onCommand.addListener(function(command) {
             if (tab.url.substring(0,9) == 'chrome://') {
                 return;
             }
-            searchHN(tab.url);
+            searchHN(tab.url, tab.title, navigateToComments);
         });
     };
 });
